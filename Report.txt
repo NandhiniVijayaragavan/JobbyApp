@@ -1,0 +1,25 @@
+03/08/2023
+
+-> created folder named "Jobby_app_nandhini"
+-> created empty git repository
+-> created back end folder named " back_end"
+-> installed express in back_end folder
+-> created server.js file
+-> imported express in server.js file
+-> created Database in MySQL named "jobbyappdb"
+-> created user table with name, email, password, phoneno, usertype, city.
+-> created loginschema and connected table in that loginschema.
+
+04/08/2023
+
+-> created react front_end app in the name of "front_end"
+
+notes of today's review session.
+name
+email
+password
+image
+about-role
+Dob
+usertype (true or false)                      
+
