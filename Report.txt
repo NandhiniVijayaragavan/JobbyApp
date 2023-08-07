@@ -8,7 +8,7 @@
 -> imported express in server.js file
 -> created Database in MySQL named "jobbyappdb"
 -> created user table with name, email, password, phoneno, usertype, city.
--> created loginschema and connected table in that loginschema.
+-> created registerschema and connected table in that registerschema.
 
 04/08/2023
 
@@ -21,5 +21,18 @@ password
 image
 about-role
 Dob
-usertype (true or false)                      
+usertype (true or false)  
+
+05/08/2023
+-> created loginschema and connected table in that loginschema.  
+-> used bcrypt package to check the password.
+
+07/08/2023
+
+-> created jobs table in workbench with columns jobId, company_logo, 
+company_name, job_role,location, skills, salary, responsibilities, 
+experience, about_job, about_company,userId.
+
+-> created all the four crud apis for jobs in backend.
+                   
 
