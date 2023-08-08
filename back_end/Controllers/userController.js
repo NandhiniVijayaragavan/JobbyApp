@@ -2,10 +2,11 @@ const connection =require("../Helpers_DB/db");
 const bcrypt = require("bcrypt");
 const saltRounds =10;
 const authJWT = require("../Middlewares/authJWT");
+const { sendMailController } = require("./mailController");
 
 module.exports = {
     registeruser: (req, res)=> {
-        console.log("Inside register user req",req.body);
+        // console.log("Inside register user req",req.body);
         const data=req.body;
 
         connection.query(`SELECT * FROM user WHERE email = '${data.email}'`,
@@ -35,6 +36,7 @@ module.exports = {
                 .status(400)
                 .send({message:"Error while adding user",error:err});
             }
+            sendMailController(data.email,data.name);
             return res.send({message:"Successfully added user"})
         });
         });    

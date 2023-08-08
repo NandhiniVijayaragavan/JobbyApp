@@ -7,4 +7,6 @@ module.exports = {
     HOST:process.env. MYSQL_HOST,
     DATABASE:process.env.MYSQL_DATABASE,
     ACCESS_TOKEN : process.env.ACCESS_TOKEN,
+    G_USERNAME : process.env.GMAIL_USERNAME,
+    G_PASSWROD : process.env.GMAIL_PASSWORD
 }

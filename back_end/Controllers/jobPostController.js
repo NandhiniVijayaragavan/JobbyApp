@@ -13,7 +13,7 @@ module.exports = {
     },
 
     addJobPost: (req, res) => {
-        console.log("Inside add Job", req.body);
+        // console.log("Inside add Job", req.body);
         const data = req.body;
          connection.query (`insert into Jobs (company_logo, company_name, job_role,location,
             skills, salary, responsibilities, experience, about_job, about_company,userId) values 
@@ -22,7 +22,7 @@ module.exports = {
             '${data.about_company}',${data.userId})`,
         (err, results) => {
             if(err) {
-                console.log(err, "inside insert post");
+                // console.log(err, "inside insert post");
                 return res .status(400) .send ({message:"Error while inserting data",error:err});
             }
             return res .send({message:"Successfully added new job item",data:results,
@@ -30,16 +30,17 @@ module.exports = {
         });
     },
     updateJobPost: (req, res) =>{
-        console.log("Inside update job", req.body);
+        // console.log("Inside update job", req.body);
         const data= req.body;
+        const id = req.params.jobId;
         connection.query(`update jobs set company_logo ='${data.company_logo}',
         company_name='${data.company_name}',job_role= '${data.job_role}',location='${data.location}',
         skills='${data.skills}',salary=${data.salary},responsibilities='${data.responsibilities}',
         experience=${data.experience},about_job='${data.about_job}',about_company='${data.about_company}' 
-        where jobId =${data.id}`,
+        where jobId =${id} `,
         (err, results) => {
             if(err) {
-                console.log(err, "inside update jobs");
+                // console.log(err, "inside update jobs");
                 return res.status(400).send({message:"Error while updating data",error:err});
             }
             return res.send({message:"Successfully updated job post", data:results,});
@@ -47,12 +48,12 @@ module.exports = {
         );
     },
     deleteJob:(req, res) => {
-        console.log("Inside delete");
+        // console.log("Inside delete");
         const id=req.params.id;
         connection.query(`delete from jobs where jobId =${id}`,
         (err, results) => {
             if(err) {
-                console.log(err, "inside delete job");
+                // console.log(err, "inside delete job");
                 return res.status(400).send({message:"Error while deleting data",error:err});
             }
             return res.send({message:"Successfully deleted job post", data:results,});
@@ -66,7 +67,7 @@ module.exports = {
                 console.log(err);
                 return res.status(400).send({message:"Error while getting data", error:err});
             }
-            console.log(res.decoded,"inside jobcontroller")
+            // console.log(res.decoded,"inside jobcontroller")
             return res.send({message:"Successfully received job list", data:results,});
         });
     },
