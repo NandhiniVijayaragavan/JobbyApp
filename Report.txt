@@ -34,5 +34,12 @@ company_name, job_role,location, skills, salary, responsibilities,
 experience, about_job, about_company,userId.
 
 -> created all the four crud apis for jobs in backend.
-                   
+
+-> created Access token when login, and verfied it for each apis
+
+08/08/2023
+
+-> installed nodemailer and connected with the registerschema.
+
+-> Completed the whole backend.                   
 
