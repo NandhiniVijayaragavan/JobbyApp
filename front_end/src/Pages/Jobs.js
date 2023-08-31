@@ -174,134 +174,175 @@ function JobDetailsModal({
           </div>
         </div>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="p-4">
         {job && (
           <div>
-            <p>
-              <strong>Job Role:</strong>{" "}
-              {editMode ? (
-                <input
-                  type="text"
-                  value={editedJob.job_role}
-                  onChange={(e) =>
-                    setEditedJob({ ...editedJob, job_role: e.target.value })
-                  }
-                  className={editMode ? "editable-input" : ""}
-                />
-              ) : (
-                job.job_role
-              )}
-            </p>
-            <p>
-              <strong>Job Location:</strong>{" "}
-              {editMode ? (
-                <input
-                  type="text"
-                  value={editedJob.location}
-                  onChange={(e) =>
-                    setEditedJob({ ...editedJob, location: e.target.value })
-                  }
-                  className={editMode ? "editable-input" : ""}
-                />
-              ) : (
-                job.location
-              )}
-            </p>
-            <p>
-              <strong>Skill Required:</strong>{" "}
-              {editMode ? (
-                <textarea
-                  type="text"
-                  value={editedJob.skills}
-                  onChange={(e) =>
-                    setEditedJob({ ...editedJob, skills: e.target.value })
-                  }
-                  className={editMode ? "editable-input" : ""}
-                />
-              ) : (
-                job.skills
-              )}
-            </p>
-            <p>
-              <strong>Salary:</strong>{" "}
-              {editMode ? (
-                <input
-                  type="number"
-                  value={editedJob.salary}
-                  onChange={(e) =>
-                    setEditedJob({ ...editedJob, salary: e.target.value })
-                  }
-                  className={editMode ? "editable-input" : ""}
-                />
-              ) : (
-                job.salary
-              )}
-            </p>
-            <p>
-              <strong>Responsibilities:</strong>{" "}
-              {editMode ? (
-                <textarea
-                  type="text"
-                  value={editedJob.responsibilities}
-                  onChange={(e) =>
-                    setEditedJob({
-                      ...editedJob,
-                      responsibilities: e.target.value,
-                    })
-                  }
-                  className={editMode ? "editable-input" : ""}
-                />
-              ) : (
-                job.responsibilities
-              )}
-            </p>
-            <p>
-              <strong>Experience Required:</strong>{" "}
-              {editMode ? (
-                <input
-                  type="number"
-                  value={editedJob.experience}
-                  onChange={(e) =>
-                    setEditedJob({ ...editedJob, experience: e.target.value })
-                  }
-                  className={editMode ? "editable-input" : ""}
-                />
-              ) : (
-                job.experience + " years"
-              )}
-            </p>
-            <p>
-              <strong>About Job:</strong>{" "}
-              {editMode ? (
-                <textarea
-                  value={editedJob.about_job}
-                  onChange={(e) =>
-                    setEditedJob({ ...editedJob, about_job: e.target.value })
-                  }
-                  className={editMode ? "editable-input" : ""}
-                />
-              ) : (
-                job.about_job
-              )}
-            </p>
-            <p>
-              <strong>About Company:</strong>{" "}
-              {editMode ? (
-                <textarea
-                  value={editedJob.about_company}
-                  onChange={(e) =>
-                    setEditedJob({
-                      ...editedJob,
-                      about_company: e.target.value,
-                    })
-                  }
-                  className={editMode ? "editable-input" : ""}
-                />
-              ) : (
-                job.about_company
-              )}
-            </p>
+            <div className="row mb-3">
+              <div className="col-4">
+                <strong>Job Role:</strong>
+              </div>
+              <div className="col-8">
+                {editMode ? (
+                  <input
+                    type="text"
+                    value={editedJob.job_role}
+                    onChange={(e) =>
+                      setEditedJob({ ...editedJob, job_role: e.target.value })
+                    }
+                    className={editMode ? "editable-input full-width" : ""}
+                  />
+                ) : (
+                  job.job_role
+                )}
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-4">
+                <strong>Job Location:</strong>{" "}
+              </div>
+              <div className="col-8">
+                {editMode ? (
+                  <input
+                    type="text"
+                    value={editedJob.location}
+                    onChange={(e) =>
+                      setEditedJob({ ...editedJob, location: e.target.value })
+                    }
+                    className={editMode ? "editable-input full-width" : ""}
+                  />
+                ) : (
+                  job.location
+                )}
+              </div>
+            </div>
 
+            <div className="row mb-3">
+              <div className="col-4">
+                <strong>Experience Required:</strong>{" "}
+              </div>
+              <div className="col-8">
+                {editMode ? (
+                  <input
+                    type="number"
+                    value={editedJob.experience}
+                    onChange={(e) =>
+                      setEditedJob({ ...editedJob, experience: e.target.value })
+                    }
+                    className={editMode ? "editable-input full-width" : ""}
+                  />
+                ) : (
+                  job.experience + " years"
+                )}
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-4">
+                <strong>Salary:</strong>{" "}
+              </div>
+              <div className="col-8">
+                {editMode ? (
+                  <input
+                    type="number"
+                    value={editedJob.salary}
+                    onChange={(e) =>
+                      setEditedJob({ ...editedJob, salary: e.target.value })
+                    }
+                    className={editMode ? "editable-input full-width" : ""}
+                  />
+                ) : (
+                  job.salary
+                )}
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-4">
+                <strong>Responsibilities:</strong>{" "}
+              </div>
+              <div className="col-8">
+                {editMode ? (
+                  <textarea
+                    type="text"
+                    value={editedJob.responsibilities}
+                    onChange={(e) =>
+                      setEditedJob({
+                        ...editedJob,
+                        responsibilities: e.target.value,
+                      })
+                    }
+                    className={
+                      editMode ? "editable-input full-width half-height" : ""
+                    }
+                  />
+                ) : (
+                  job.responsibilities
+                )}
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-4">
+                {" "}
+                <strong>Skill Required:</strong>{" "}
+              </div>
+              <div className="col-8">
+                {editMode ? (
+                  <textarea
+                    type="text"
+                    value={editedJob.skills}
+                    onChange={(e) =>
+                      setEditedJob({ ...editedJob, skills: e.target.value })
+                    }
+                    className={
+                      editMode ? "editable-input full-width half-height" : ""
+                    }
+                  />
+                ) : (
+                  job.skills
+                )}
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-4">
+                <strong>About Job:</strong>{" "}
+              </div>
+              <div className="col-8">
+                {editMode ? (
+                  <textarea
+                    value={editedJob.about_job}
+                    onChange={(e) =>
+                      setEditedJob({ ...editedJob, about_job: e.target.value })
+                    }
+                    className={
+                      editMode ? "editable-input full-width half-height" : ""
+                    }
+                  />
+                ) : (
+                  job.about_job
+                )}
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-4">
+                <strong>About Company:</strong>{" "}
+              </div>
+              <div className="col-8">
+                {editMode ? (
+                  <textarea
+                    value={editedJob.about_company}
+                    onChange={(e) =>
+                      setEditedJob({
+                        ...editedJob,
+                        about_company: e.target.value,
+                      })
+                    }
+                    className={
+                      editMode ? "editable-input full-width half-height" : ""
+                    }
+                  />
+                ) : (
+                  job.about_company
+                )}
+              </div>
+            </div>
           </div>
         )}
       </Modal.Body>

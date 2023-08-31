@@ -280,3 +280,13 @@
   .editable-input {
     border-radius: 5px;
   }
+  .full-width{
+    width: 100%;
+  }
+  .half-height {
+    height: 70%;
+    margin-bottom: 1px;
+  }
+  .col-8{
+    margin-bottom: -20px;
+  }

@@ -24,6 +24,7 @@ const preset = "jobbyregimg";
 const Register = () => {
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
+  const [imageUrl, setimageUrl] = useState("");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -78,7 +79,7 @@ const Register = () => {
         .oneOf([Yup.ref("password"), null], "Passwords must match"),
       about: Yup.string().required(),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       if (!selectedImage) {
         showErrorToast("Please select an image.");
         return;
@@ -90,14 +91,16 @@ const Register = () => {
       const formData = new FormData();
       formData.append("file", selectedImage);
       formData.append("upload_preset", preset);
-
-      axios
+      formData.append("cloud_name", "drf2skt5s");
+    await axios 
         .post(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+          "https://api.cloudinary.com/v1_1/drf2skt5s/image/upload",
           formData
         )
+        .then(res=>res.json())
         .then((response) => {
-          const imageUrl = response.data.secure_url;
+          setimageUrl(response?.data.url)
+          // const imageUrl = response.data.secure_url;
           console.log(response.data);
           // console.log(imageUrl);
 
@@ -112,7 +115,7 @@ const Register = () => {
             about: values.about,
           };
           console.log(requestedValues);
-          axios
+           axios
             .post("api/user/registeruser", requestedValues)
             .then((res) => {
               showSuccessToast(res.data.message);
