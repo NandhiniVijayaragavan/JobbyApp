@@ -41,5 +41,28 @@ experience, about_job, about_company,userId.
 
 -> installed nodemailer and connected with the registerschema.
 
--> Completed the whole backend.                   
+-> Completed the whole backend.    
 
+09/08/2023
+
+-> created front end folder structure.
+-> created MainRoutes, and created pages and layout  
+
+notes of today's session             
+
+first name, last name, email, password, confirm password, 
+image, dob(react date picker package), about, 
+
+-> learned bootstrap normal modal and tried it,
+-> learned material UI modal and tried it, 
+-> yet to learn react bootstrap modal.
+
+10/08/2023
+
+-> have seen sir's code on modals.
+-> started creating login page with formik yup validation
+-> created login page
+-> started creating register page with formik yup vlaidation.
+-> Completed the whole login and register form design.
+
+11/08/2023

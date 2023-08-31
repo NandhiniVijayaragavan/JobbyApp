@@ -1,0 +1,11 @@
+.fixed_navbar {
+    height: 12vh;
+    border-bottom: 1px solid var(--primary-color);
+  }
+  .scrollable_content {
+    height: 88vh;
+    overflow-y: scroll;
+  }
+  .scrollable_content::-webkit-scrollbar {
+    display: none;
+  }

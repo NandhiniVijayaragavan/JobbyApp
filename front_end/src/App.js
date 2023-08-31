@@ -1,11 +1,15 @@
 import './App.css';
-import Login from './Components/Login';
+import React, {useState}  from 'react'
+import MainRoutes from './Routing/mainRoutes'
+import { ToastContainer } from 'react-toastify';
 
 function App() {
+
   return (
-    <div>
-      <Login/>
-    </div>
+    <>
+      <MainRoutes/>
+      <ToastContainer/>
+    </>
   );
 }
 

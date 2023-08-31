@@ -4,6 +4,7 @@ const saltRounds =10;
 const authJWT = require("../Middlewares/authJWT");
 const { sendMailController } = require("./mailController");
 
+
 module.exports = {
     registeruser: (req, res)=> {
         // console.log("Inside register user req",req.body);
@@ -61,9 +62,17 @@ module.exports = {
                             userId: qryresult[0].id,
                             isemployer: qryresult[0].isemployer,
                         };
+                        console.log(payload);
                         const token =await authJWT.signJWTToken(payload);
+                        const userFullName = qryresult[0].name;
+                        const userProfilePic = qryresult[0].image;
+                        const role = qryresult[0].isemployer;
+                        const userId =qryresult[0].id;
+
                         console.log(token);
-                        return res.send({message:"Login Sucessful.."});
+                        console.log(userFullName);
+                        console.log(userId);
+                        return res.send({message:"Login Sucessful..",token:token, userFullName: userFullName, userProfilePic: userProfilePic, role: role, userId: userId,});
                     }
                         return res.status(400).send({message:"password does not match"});
                     })
