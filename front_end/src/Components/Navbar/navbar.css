@@ -14,8 +14,8 @@
     font-weight: bold;
   }
   .jobbylogo{
-        width: 75px; /* Adjust the width as needed */
-        height: auto; /* This will maintain the aspect ratio */
+        width: 75px; 
+        height: auto; 
         border-radius: 5px;
   }
   .menu {
@@ -146,10 +146,16 @@ transform: translateX(-50%);
 .show-dropdown .dropdown-menu {
   display: block; 
 }
-
+.slider{
+  margin-left: 8px;
+}
+.round{
+  width: 100%;
+}
 .dropdown-menu li {
   list-style: none;
   margin: 5px 0;
+  border-bottom: 0.7px inset black;
 }
 
 .dropdown-menu .menu-link {

@@ -7,44 +7,20 @@ import {
   showSuccessToast,
   showErrorToast,
 } from "../Components/Modals/toastModal";
-import setAuthToken from "../Helpers/setAuthToken";
 
 const cloudName = "drf2skt5s";
 const preset = "companylogo";
 
 const CreateJob = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("authtoken");
   const storedUserId = localStorage.getItem("userID");
-  const [logoUrl, setLogoUrl] = useState("");
-  const handleImageChange = async (e) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const authtoken = localStorage.getItem("authtoken")
+
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
-
-    //  Cloudinary
-    if (file) {
-      setAuthToken(null);
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", preset);
-
-      try {
-        const response = await axios.post(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-          formData
-        );
-
-        const uploadedUrl = response?.data.url;
-        console.log("Uploaded Logo URL:", uploadedUrl);
-
-        setLogoUrl(uploadedUrl); 
-
-      } catch (error) {
-        console.error("Error uploading image to Cloudinary:", error);
-        showErrorToast("Error uploading image. Please try again.");
-      }
-    }
+    setSelectedImage(file);
   };
-
 
   const formik = useFormik({
     initialValues: {
@@ -75,10 +51,30 @@ const CreateJob = () => {
       about_job: Yup.string().required("Required"),
       about_company: Yup.string().required("Required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       console.log("Submitting form...");
       console.log(values);
-      setAuthToken(token);
+      if (!selectedImage) {
+        showErrorToast("Please select an image.");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("file", selectedImage);
+      formData.append("upload_preset", preset);
+
+      axios.interceptors.request.use((config) => {
+        console.log('Request headers to Cloudinary:', config.headers);
+        return config;
+      });
+
+      axios
+        .post(
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+          formData
+        )
+        .then((response) => {
+          const logoUrl = response?.data.url;
+          console.log(response.data);
 
       const requestedValues = {
         company_logo: logoUrl,
@@ -95,15 +91,24 @@ const CreateJob = () => {
       };
       console.log(requestedValues);
 
-      try {
-        const apiResponse = await axios.post("/api/jobs/addJobPost", requestedValues);
-        console.log("API Response:", apiResponse.data);
-        showSuccessToast(apiResponse.data.message);
-        navigate("/jobs", { replace: true });
-      } catch (error) {
-        console.error("API Error:", error);
-        showErrorToast(error.response?.data?.message || "An error occurred");
-      }
+      axios
+        .post("/api/jobs/addJobPost", {headers:{"Authorization":`Bearer ${authtoken}`}},requestedValues)
+        .then((response) => {
+          console.log("API Response:", response.data);
+          showSuccessToast(response.data.message);
+          setSelectedImage(null);
+          navigate("/jobs", { replace: true });
+          // Handle success or show a success message
+        })
+        .catch((error) => {
+          console.error("API Error:", error);
+          showErrorToast(error.response.data.message);
+          // Handle error or show an error message
+        });
+      })
+      .catch((error) => {
+        console.error("Error uploading image:", error);
+      });
     },
   });
 

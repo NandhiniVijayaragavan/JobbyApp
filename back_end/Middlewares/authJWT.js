@@ -1,5 +1,6 @@
 const jwt =require ("jsonwebtoken");
 const {ACCESS_TOKEN} = require("../Config/config");
+const connection = require("../Helpers_DB/db");
 
 module.exports.signJWTToken = (payload) => {
     return new Promise((resolve, reject) => {
@@ -53,3 +54,36 @@ module.exports.verifyJWTTokenEmp = async (req, res, next) => {
     }
 
 };
+
+  
+module.exports.verifyJWTTokenOwner = async (req, res, next) => {
+    if (!res.decoded) {
+      return res.status(401).send({ message: "Access Denied! No token found" });
+    }
+  
+    if (res.decoded.isemployer) {
+      const jobId = req.params.jobId;
+  
+      const sql = "SELECT userId FROM jobs WHERE jobId = ?";
+  
+      connection.query(sql, [jobId], (err, results) => {
+        if (err) {
+          return res.status(500).json({ message: "Database error", error: err });
+        }
+  
+        if (results.length === 0) {
+          return res.status(404).json({ message: "Job not found" });
+        }
+  
+        const jobUserId = results[0].userId;
+        if (jobUserId === res.decoded.userId) {
+          return next();
+        } else {
+          return res.status(400).json({ message: "Not Authorized" });
+        }
+      });
+    } else {
+      return res.status(400).json({ message: "Not Authorized" });
+    }
+  };
+  

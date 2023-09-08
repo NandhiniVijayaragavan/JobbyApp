@@ -24,3 +24,7 @@ export const showErrorToast = (message) => {
     progress: undefined,
   });
 };
+
+document.body.addEventListener('click', () => {
+  toast.dismiss();
+});

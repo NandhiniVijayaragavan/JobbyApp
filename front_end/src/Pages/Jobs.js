@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useParams } from "react";
 import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
 import "./Style.css";
@@ -6,6 +6,8 @@ import {
   showSuccessToast,
   showErrorToast,
 } from "../Components/Modals/toastModal";
+import { useNavigate, useLocation } from "react-router-dom"; 
+import PropTypes from "prop-types";
 
 function Jobs() {
   const [jobList, setJobList] = useState([]);
@@ -13,22 +15,17 @@ function Jobs() {
   const role = localStorage.getItem("role");
   const [showModal, setShowModal] = useState(false);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  const category = location.pathname.split("/")[2];
+
   const handleReadMoreClick = (job) => {
     setSelectedJob(job);
     setShowModal(true);
   };
 
   const getJobs = () => {
-    if (role === "0") {
-      axios
-        .get("/api/jobs/getAllJob")
-        .then((response) => {
-          setJobList(response.data.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching job list:", error);
-        });
-    } else {
+    if (category === "posted") {
       const userId = localStorage.getItem("userID");
       axios
         .get(`/api/jobs/getUserjobList/${userId}`)
@@ -38,11 +35,20 @@ function Jobs() {
         .catch((error) => {
           console.error("Error fetching user job list:", error);
         });
+    } else {
+      axios
+        .get("/api/jobs/getAllJob")
+        .then((response) => {
+          setJobList(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching job list:", error);
+        });
     }
   };
   useEffect(() => {
     getJobs();
-  }, [role]);
+  }, [category]);
 
   return (
     <div className="container mt-4">
@@ -51,24 +57,25 @@ function Jobs() {
         {jobList.map((job) => (
           <div key={job.jobId} className="col-md-4 mb-4">
             <div className="card h-100 shadow">
-              <div className="d-flex align-items-center justify-content-between  p-3">
+              <div className="d-flex align-items-center justify-content-between  p-3 pt-2">
                 <div>
-                  <h5 className="card-title">{job.company_name}</h5>
+                  <h4 className="card-title">{job.company_name}</h4>
                 </div>
-                <div>
+                <div style={{ width: '60px', height: '60px' }}>
                   <img
                     src={job.company_logo}
                     alt="logo"
                     className="company-logo"
+                    style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                   />
                 </div>
               </div>
               <div className="card-body">
-                <p className="card-text">Job Role: {job.job_role}</p>
-                <p className="card-text">Location: {job.location}</p>
-                <p className="card-text">Salary: {job.salary} </p>
+                <p className="card-text"><b>Job Role: </b> {job.job_role}</p>
+                <p className="card-text"><b>Location:</b> {job.location}</p>
+                <p className="card-text"><b>Salary: </b> {job.salary} </p>
                 <p className="card-text">
-                  Experience Required: {job.experience} Years
+                 <b> Experience Required: </b> {job.experience} Years
                 </p>
                 <button
                   className="btn btn-dark"
@@ -83,7 +90,7 @@ function Jobs() {
       </div>
       <JobDetailsModal
         job={selectedJob}
-        companyName={selectedJob?.company_name} // Pass the company name here
+        companyName={selectedJob?.company_name} 
         companyLogo={selectedJob?.company_logo}
         showModal={showModal}
         setShowModal={setShowModal}
@@ -112,21 +119,21 @@ function JobDetailsModal({
   };
 
   const handleDeleteClick = () => {
-    // Call the delete API here
     axios
       .delete(`/api/jobs/deleteJob/${job.jobId}`)
       .then((response) => {
         showSuccessToast("Job successfully deleted");
-        getJobs(); // Refresh the job list after deletion
-        setShowModal(false); // Close the modal
+        getJobs(); 
+        setShowModal(false); 
       })
       .catch((error) => {
-        showErrorToast("Error deleting job");
+        showErrorToast(error.response.data.message);
+        setShowModal(false);
       });
   };
 
   const [editMode, setEditMode] = useState(false);
-  const [editedJob, setEditedJob] = useState({}); // Clone initial job data
+  const [editedJob, setEditedJob] = useState({}); 
 
   useEffect(() => {
     setEditedJob(job);
@@ -137,22 +144,21 @@ function JobDetailsModal({
   };
 
   const handleSaveClick = () => {
-    // Call the update API with editedJob data
     axios
       .put(`/api/jobs/updateJobPost/${job.jobId}`, editedJob)
       .then((response) => {
         showSuccessToast("Job successfully updated");
-        getJobs(); // Refresh the job list after update
-        setEditMode(false); // Exit edit mode
-        setShowModal(false); // Close the modal
+        getJobs(); 
+        setEditMode(false); 
+        setShowModal(false);
       })
       .catch((error) => {
-        showErrorToast("Error updating job");
+        showErrorToast(error.response.data.message);
+        setShowModal(false);
       });
   };
 
   const handleCancelClick = () => {
-    // Exit edit mode and reset editedJob to original values
     setEditMode(false);
     setEditedJob({ ...job });
   };
@@ -160,14 +166,10 @@ function JobDetailsModal({
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
       <Modal.Header closeButton>
-        <div className="d-flex align-items-center">
-          <div>
-            <img
-              src={companyLogo}
-              alt="logo"
-              className="company-logo"
-              style={{ marginRight: "10px" }}
-            />
+        <div className="d-flex align-items-center ">
+          <div style={{ width: '80px', height: '70px',marginRight: '10px' }}>
+            <img src={companyLogo} alt="logo" className="modal-logo "
+            style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
           </div>
           <div>
             <Modal.Title>{companyName}</Modal.Title>
@@ -405,5 +407,8 @@ function JobDetailsModal({
     </Modal>
   );
 }
+
+Jobs.propTypes = {
+};
 
 export default Jobs;

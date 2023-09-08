@@ -42,7 +42,13 @@ const Layout = () => {
         },
         {
           path: "/jobs",
-          element: <Jobs/>
+          element: <Jobs/>,
+          children: [
+            {
+              path: "posted", 
+              element: <Jobs category="posted" />,
+            },
+          ],
         },
         {
           path: "/create_jobs",

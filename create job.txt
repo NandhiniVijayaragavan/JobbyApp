@@ -7,44 +7,10 @@ import {
   showSuccessToast,
   showErrorToast,
 } from "../Components/Modals/toastModal";
-import setAuthToken from "../Helpers/setAuthToken";
-
-const cloudName = "drf2skt5s";
-const preset = "companylogo";
 
 const CreateJob = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("authtoken");
   const storedUserId = localStorage.getItem("userID");
-  const [logoUrl, setLogoUrl] = useState("");
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-
-    //  Cloudinary
-    if (file) {
-      setAuthToken(null);
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", preset);
-
-      try {
-        const response = await axios.post(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-          formData
-        );
-
-        const uploadedUrl = response?.data.url;
-        console.log("Uploaded Logo URL:", uploadedUrl);
-
-        setLogoUrl(uploadedUrl); 
-
-      } catch (error) {
-        console.error("Error uploading image to Cloudinary:", error);
-        showErrorToast("Error uploading image. Please try again.");
-      }
-    }
-  };
-
 
   const formik = useFormik({
     initialValues: {
@@ -75,13 +41,12 @@ const CreateJob = () => {
       about_job: Yup.string().required("Required"),
       about_company: Yup.string().required("Required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       console.log("Submitting form...");
       console.log(values);
-      setAuthToken(token);
 
       const requestedValues = {
-        company_logo: logoUrl,
+        company_logo: values.company_logo,
         company_name: values.company_name,
         job_role: values.job_role,
         location: values.location,
@@ -95,15 +60,19 @@ const CreateJob = () => {
       };
       console.log(requestedValues);
 
-      try {
-        const apiResponse = await axios.post("/api/jobs/addJobPost", requestedValues);
-        console.log("API Response:", apiResponse.data);
-        showSuccessToast(apiResponse.data.message);
-        navigate("/jobs", { replace: true });
-      } catch (error) {
-        console.error("API Error:", error);
-        showErrorToast(error.response?.data?.message || "An error occurred");
-      }
+      axios
+        .post("/api/jobs/addJobPost", requestedValues)
+        .then((response) => {
+          console.log("API Response:", response.data);
+          showSuccessToast(response.data.message);
+          navigate("/jobs", { replace: true });
+          // Handle success or show a success message
+        })
+        .catch((error) => {
+          console.error("API Error:", error);
+          showErrorToast(error.response.data.message);
+          // Handle error or show an error message
+        });
     },
   });
 
@@ -159,8 +128,6 @@ const CreateJob = () => {
               className="form-control"
               id="company_logo"
               name="company_logo"
-              accept=".jpeg, .jpg, .svg, image/jpeg, image/svg"
-                  onChange={handleImageChange}
             />
           </div>
           <div className="col">
